@@ -72,10 +72,10 @@ _start:
 		db ' $ docker run -it ubuntu bash', 0x0A
 		db 0x0A
 		db 'Share images, automate workflows, and more with a free Docker Hub account:', 0x0A
-		db ' http://hub.docker.com', 0x0A
+		db ' https://hub.docker.com', 0x0A
 		db 0x0A
 		db 'For more examples and ideas, visit:', 0x0A
-		db ' http://docs.docker.com/userguide/', 0x0A
+		db ' https://docs.docker.com/userguide/', 0x0A
 		db 0x0A
 	length: equ	$-message            ; message length calculation
 
