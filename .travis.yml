@@ -1,0 +1,20 @@
+language: bash
+
+# for secret experimental features ;)
+sudo: 9000
+
+install:
+  - git clone https://github.com/docker-library/official-images.git ~/official-images
+
+before_script:
+  - env | sort
+  - image='hello-world'
+
+script:
+  - ./update.sh
+  - test -z "$(git status --porcelain hello)"
+  - docker build -t "$image" .
+  - ~/official-images/test/run.sh "$image"
+  - docker images
+
+# vim:set et ts=2 sw=2:
