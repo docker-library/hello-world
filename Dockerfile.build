@@ -1,10 +1,11 @@
-FROM debian:jessie
-
-RUN apt-get update && apt-get install -y make nasm && rm -rf /var/lib/apt/lists/*
+FROM alpine:3.3
 
 WORKDIR /usr/src/hello
 COPY . /usr/src/hello
 
-RUN make clean hello
+RUN apk add --no-cache gcc libc-dev \
+	&& gcc -Os -nostartfiles -fno-asynchronous-unwind-tables -static \
+		-o hello hello.c \
+	&& strip -R .comment -s hello
 
 CMD ["./hello"]
