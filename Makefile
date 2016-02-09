@@ -5,3 +5,7 @@ hello: hello.asm
 .PHONY: clean
 clean:
 	-rm -vf hello
+
+.PHONY: test
+test: hello
+	./hello
