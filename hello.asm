@@ -1,5 +1,5 @@
 ; this is especially thanks to:
-; http://blog.markloiseau.com/2012/05/tiny-64-bit-elf-executables/
+; http://web.archive.org/web/20140528193301/http://blog.markloiseau.com/2012/05/tiny-64-bit-elf-executables
 
 BITS 64
 	org	0x00400000	; Program load offset
