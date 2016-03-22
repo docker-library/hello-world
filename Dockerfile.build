@@ -1,6 +1,6 @@
-FROM debian:jessie
+FROM alpine:3.3
 
-RUN apt-get update && apt-get install -y make nasm && rm -rf /var/lib/apt/lists/*
+RUN apk update && apk add make nasm && rm -fr /var/cache/apk/*
 
 WORKDIR /usr/src/hello
 COPY . /usr/src/hello
