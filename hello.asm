@@ -75,7 +75,7 @@ _start:
 		db ' https://hub.docker.com', 0x0A
 		db 0x0A
 		db 'For more examples and ideas, visit:', 0x0A
-		db ' https://docs.docker.com/userguide/', 0x0A
+		db ' https://docs.docker.com/engine/userguide/', 0x0A
 		db 0x0A
 	length: equ	$-message            ; message length calculation
 
