@@ -1,10 +1,11 @@
 hello: hello.asm
-	nasm -o $@ $<
-	chmod +x hello
+	nasm -f elf -o $@.o $<
+	ld -e _start $@.o -o hello
+	chmod 755 hello
 
 .PHONY: clean
 clean:
-	-rm -vf hello
+	-rm -vf hello hello.o
 
 .PHONY: test
 test: hello

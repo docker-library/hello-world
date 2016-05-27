@@ -1,6 +1,11 @@
 FROM debian:jessie
 
-RUN apt-get update && apt-get install -y make nasm && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y make nasm 
+
+# && rm -rf /var/lib/apt/lists/*
+#
+#    ^^ I'm not sure why this is needed, but I way do not want that wiped.
+#       So it's commented out.
 
 WORKDIR /usr/src/hello
 COPY . .
