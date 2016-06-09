@@ -1,17 +1,43 @@
 #!/bin/bash
-set -e
+set -eu
 
+self="$(basename "$BASH_SOURCE")"
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
-url='git://github.com/docker-library/hello-world'
+# get the most recent commit which modified any of "$@"
+fileCommit() {
+	git log -1 --format='format:%H' HEAD -- "$@"
+}
 
-echo '# maintainer: InfoSiftr <github@infosiftr.com> (@infosiftr)'
+# get the most recent commit which modified "$1/Dockerfile" or any file COPY'd from "$1/Dockerfile"
+dirCommit() {
+	local dir="$1"; shift
+	(
+		cd "$dir"
+		fileCommit \
+			Dockerfile \
+			$(git show HEAD:./Dockerfile | awk '
+				toupper($1) == "COPY" {
+					for (i = 2; i < NF; i++) {
+						print $i
+					}
+				}
+			')
+	)
+}
 
-commit="$(git log -1 --format='format:%H' -- Dockerfile $(awk 'toupper($1) == "COPY" { for (i = 2; i < NF; i++) { print $i } }' Dockerfile))"
+cat <<-EOH
+# this file is generated via https://github.com/docker-library/hello-world/blob/$(fileCommit "$self")/$self
 
-versionAliases=( latest )
+Maintainers: Tianon Gravi <admwiggin@gmail.com> (@tianon),
+             Joseph Ferguson <yosifkit@gmail.com> (@yosifkit)
+GitRepo: https://github.com/docker-library/hello-world.git
+EOH
+
+commit="$(dirCommit .)"
 
 echo
-for va in "${versionAliases[@]}"; do
-	echo "$va: ${url}@${commit}"
-done
+cat <<-EOE
+	Tags: latest
+	GitCommit: $commit
+EOE
