@@ -10,8 +10,8 @@ before_script:
 
 script:
   - ./update.sh
-  - test -z "$(git status --porcelain hello)"
-  - docker build -t "$image" .
+  - test -z "$(git status --porcelain '*/hello')"
+  - docker build -t "$image" hello-world
   - ~/official-images/test/run.sh "$image"
 
 after_script:
