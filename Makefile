@@ -1,11 +1,25 @@
-hello: hello.asm
-	nasm -o $@ $<
-	chmod +x hello
+IMAGES := \
+	hello-world \
+	hola-mundo \
+	hello-seattle
+
+ASM_TARGETS := $(addsuffix /hello, $(IMAGES))
+
+.PHONY: all
+all: $(ASM_TARGETS)
+
+$(ASM_TARGETS): hello.asm
+	mkdir -p '$(dir $@)'
+	nasm -o '$@' -DDOCKER_IMAGE="'$$(dirname '$@')'" '$<'
+	chmod +x '$@'
 
 .PHONY: clean
 clean:
-	-rm -vf hello
+	-rm -vrf $(addsuffix /, $(IMAGES))
 
 .PHONY: test
-test: hello
-	./hello
+test: $(ASM_TARGETS)
+	@for b in $^; do \
+		( set -x && "./$$b" ); \
+		( set -x && "./$$b" | grep -q '"'"$$(dirname "$$b")"'"' ); \
+	done

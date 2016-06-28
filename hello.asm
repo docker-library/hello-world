@@ -55,14 +55,24 @@ _start:
 	mov	rdi, 0           ; return 0 (success)
 	syscall
 
+%ifndef DOCKER_IMAGE
+	%define DOCKER_IMAGE 'hello-world'
+%endif
+
 	message:
 		db 0x0A
-		db 'Hello from Docker.', 0x0A
+%ifidn DOCKER_IMAGE, 'hola-mundo'
+		db '¡Hola de DockerCon EU 2015 (Barcelona)!', 0x0A
+%elifidn DOCKER_IMAGE, 'hello-seattle'
+		db 'Hello from DockerCon 2016 (Seattle)!', 0x0A
+%else
+		db 'Hello from Docker!', 0x0A
+%endif
 		db 'This message shows that your installation appears to be working correctly.', 0x0A
 		db 0x0A
 		db 'To generate this message, Docker took the following steps:', 0x0A
 		db ' 1. The Docker client contacted the Docker daemon.', 0x0A
-		db ' 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.', 0x0A
+		db ' 2. The Docker daemon pulled the "', DOCKER_IMAGE, '" image from the Docker Hub.', 0x0A
 		db ' 3. The Docker daemon created a new container from that image which runs the', 0x0A
 		db '    executable that produces the output you are currently reading.', 0x0A
 		db ' 4. The Docker daemon streamed that output to the Docker client, which sent it', 0x0A

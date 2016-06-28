@@ -5,6 +5,6 @@ RUN apt-get update && apt-get install -y make nasm && rm -rf /var/lib/apt/lists/
 WORKDIR /usr/src/hello
 COPY . .
 
-RUN make clean hello test
+RUN make clean all test
 
-CMD ["./hello"]
+CMD ["./hello-world/hello"]

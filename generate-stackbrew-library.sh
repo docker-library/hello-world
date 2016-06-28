@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eu
 
+image="${1:-hello-world}"
+
 self="$(basename "$BASH_SOURCE")"
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
@@ -32,9 +34,10 @@ cat <<-EOH
 Maintainers: Tianon Gravi <admwiggin@gmail.com> (@tianon),
              Joseph Ferguson <yosifkit@gmail.com> (@yosifkit)
 GitRepo: https://github.com/docker-library/hello-world.git
+Directory: $image
 EOH
 
-commit="$(dirCommit .)"
+commit="$(dirCommit "$image")"
 
 echo
 cat <<-EOE
