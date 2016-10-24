@@ -2,7 +2,6 @@ FROM microsoft/windowsservercore
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';"]
 
-RUN Install-WindowsFeature NET-Framework-45-Core
 RUN Invoke-WebRequest "https://download.microsoft.com/download/5/f/7/5f7acaeb-8363-451f-9425-68a90f98b238/visualcppbuildtools_full.exe" \
 		-OutFile visualcppbuildtools_full.exe -UseBasicParsing ; \
 	Start-Process -FilePath 'visualcppbuildtools_full.exe' -ArgumentList '/quiet', '/NoRestart' -Wait ; \
@@ -15,4 +14,4 @@ RUN pushd 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC' ; \
 	popd
 
 ADD hello.c .
-RUN cl /D_WIN32_WINNT=0x0A00 /D_WINVER=0x0A00 hello.c
+RUN cl hello.c
