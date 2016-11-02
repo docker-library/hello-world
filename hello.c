@@ -1,5 +1,33 @@
-//#include <unistd.h>
-#include <sys/syscall.h>
+#if __linux__
+
+	#include <sys/syscall.h>
+
+	static inline int write(int fd, const void *buf, unsigned int count) {
+		return syscall(SYS_write, fd, buf, count);
+	}
+	static inline void _exit(int status) {
+		syscall(SYS_exit, status);
+	}
+
+	#ifndef DOCKER_RUN_NAME
+		#define DOCKER_RUN_NAME "an Ubuntu container"
+	#endif
+	#ifndef DOCKER_RUN_CMD
+		#define DOCKER_RUN_CMD "ubuntu bash"
+	#endif
+
+#else
+
+	#include <unistd.h>
+
+	#ifndef DOCKER_RUN_NAME
+		#define DOCKER_RUN_NAME "a Nano Server container"
+	#endif
+	#ifndef DOCKER_RUN_CMD
+		#define DOCKER_RUN_CMD "microsoft/nanoserver powershell"
+	#endif
+
+#endif
 
 #ifndef DOCKER_IMAGE
 	#define DOCKER_IMAGE "hello-world"
@@ -22,8 +50,8 @@ const char message[] =
 	" 4. The Docker daemon streamed that output to the Docker client, which sent it\n"
 	"    to your terminal.\n"
 	"\n"
-	"To try something more ambitious, you can run an Ubuntu container with:\n"
-	" $ docker run -it ubuntu bash\n"
+	"To try something more ambitious, you can run " DOCKER_RUN_NAME " with:\n"
+	" $ docker run -it " DOCKER_RUN_CMD "\n"
 	"\n"
 	"Share images, automate workflows, and more with a free Docker Hub account:\n"
 	" https://hub.docker.com\n"
@@ -33,9 +61,6 @@ const char message[] =
 	"\n";
 
 void _start() {
-	//write(1, message, sizeof(message) - 1);
-	syscall(SYS_write, 1, message, sizeof(message) - 1);
-
-	//_exit(0);
-	syscall(SYS_exit, 0);
+	write(1, message, sizeof(message) - 1);
+	_exit(0);
 }

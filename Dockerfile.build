@@ -1,17 +1,33 @@
 # explicitly use Debian for maximum cross-architecture compatibility
 FROM debian:jessie
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN set -ex; \
+	\
+	apt-get update; \
+	\
+# linux
+	apt-get install -y --no-install-recommends \
 		gcc \
 		libc6-dev \
 		make \
-	&& rm -rf /var/lib/apt/lists/*
+	; \
+	\
+# windows (only build on amd64 -- multiarch doesn't need this)
+	if [ "$(dpkg --print-architecture)" = 'amd64' ]; then \
+		apt-get install -y --no-install-recommends \
+			gcc-mingw-w64-x86-64 \
+		; \
+	fi; \
+	\
+	rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/hello
 COPY . .
 
-RUN set -x \
-	&& make clean all test \
-	&& ls -l */hello
+RUN set -ex; \
+	\
+	make clean all test; \
+	\
+	find \( -name 'hello' -or -name 'hello.exe' \) -exec ls -l '{}' +
 
 CMD ["./hello-world/hello"]

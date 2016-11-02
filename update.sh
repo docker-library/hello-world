@@ -7,8 +7,8 @@ set -x
 
 docker build -f Dockerfile.build -t hello-world:build .
 
-rm -rf */hello
-docker run --rm hello-world:build sh -c 'tar --create */hello' | tar --extract --wildcards '*/hello'
+rm -rf */hello */nanoserver/hello.exe
+docker run --rm hello-world:build sh -c 'find \( -name hello -or -name hello.exe \) -print0 | xargs -0 tar --create' | tar --extract --verbose
 
 for h in */hello; do
 	d="$(dirname "$h")"
@@ -16,3 +16,4 @@ for h in */hello; do
 	docker build -t hello-world:"test-$d" "$d"
 	docker run --rm hello-world:"test-$d"
 done
+ls -l */nanoserver/hello.exe || :
