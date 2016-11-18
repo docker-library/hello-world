@@ -10,7 +10,7 @@ before_script:
 
 script:
   - ./update.sh
-  - test -z "$(git status --porcelain '*/hello')"
+  - test -z "$(git status --porcelain '*/hello' '*/nanoserver/hello.txt')"
   - docker build -t "$image" hello-world
   - ~/official-images/test/run.sh "$image"
 

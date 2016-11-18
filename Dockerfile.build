@@ -1,5 +1,5 @@
 # explicitly use Debian for maximum cross-architecture compatibility
-FROM debian:jessie
+FROM debian:jessie-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		gcc \
@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /usr/src/hello
 COPY . .
 
-RUN set -x \
-	&& make clean all test \
-	&& ls -l */hello
+RUN set -ex; \
+	make clean all test; \
+	find \( -name 'hello' -or -name 'hello.txt' \) -exec ls -l '{}' +
 
 CMD ["./hello-world/hello"]

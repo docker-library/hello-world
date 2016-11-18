@@ -34,7 +34,6 @@ cat <<-EOH
 Maintainers: Tianon Gravi <admwiggin@gmail.com> (@tianon),
              Joseph Ferguson <yosifkit@gmail.com> (@yosifkit)
 GitRepo: https://github.com/docker-library/hello-world.git
-Directory: $image
 EOH
 
 commit="$(dirCommit "$image")"
@@ -43,4 +42,16 @@ echo
 cat <<-EOE
 	Tags: latest
 	GitCommit: $commit
+	Directory: $image
 EOE
+
+if [ -d "$image/nanoserver" ]; then
+	commit="$(dirCommit "$image/nanoserver")"
+
+	echo
+	cat <<-EOE
+		Tags: nanoserver
+		GitCommit: $commit
+		Directory: $image/nanoserver
+	EOE
+fi
