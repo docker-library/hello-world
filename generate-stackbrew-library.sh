@@ -53,5 +53,6 @@ if [ -d "$image/nanoserver" ]; then
 		Tags: nanoserver
 		GitCommit: $commit
 		Directory: $image/nanoserver
+		Constraints: nanoserver
 	EOE
 fi
