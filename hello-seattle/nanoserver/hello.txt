@@ -13,8 +13,8 @@ To generate this message, Docker took the following steps:
 To try something more ambitious, you can run a Nano Server container with:
  $ docker run -it microsoft/nanoserver powershell
 
-Share images, automate workflows, and more with a free Docker Hub account:
- https://hub.docker.com
+Share images, automate workflows, and more with a free Docker ID:
+ https://cloud.docker.com/
 
 For more examples and ideas, visit:
  https://docs.docker.com/engine/userguide/
