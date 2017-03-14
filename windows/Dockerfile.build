@@ -1,0 +1,22 @@
+FROM microsoft/windowsservercore
+
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';"]
+
+ENV VISUAL_CPP_BUILD_TOOLS_URL "https://download.microsoft.com/download/5/f/7/5f7acaeb-8363-451f-9425-68a90f98b238/visualcppbuildtools_full.exe"
+
+RUN Write-Host ('Downloading {0}...' -f $Env:VISUAL_CPP_BUILD_TOOLS_URL); \
+	Invoke-WebRequest $Env:VISUAL_CPP_BUILD_TOOLS_URL \
+		-OutFile visualcppbuildtools_full.exe -UseBasicParsing ; \
+	Write-Host 'Installing Visual C++ Build Tools (can take a while)...'; \
+	Start-Process -FilePath 'visualcppbuildtools_full.exe' -ArgumentList '/quiet', '/NoRestart' -Wait ; \
+	Remove-Item .\visualcppbuildtools_full.exe
+
+RUN [Environment]::SetEnvironmentVariable('PATH', ${Env:ProgramFiles(x86)} + '\Microsoft Visual Studio 14.0\VC\bin\amd64;' + ${Env:ProgramFiles(x86)} + '\Windows Kits\10\bin\x64;' + $env:PATH, [EnvironmentVariableTarget]::Machine);
+
+RUN Write-Host 'Configuring environment'; \
+	pushd 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC' ; \
+	cmd /c 'vcvarsall.bat amd64&set' | foreach { if ($_ -match '=') { $v = $_.split('='); setx /M $v[0] $v[1] } } ; \
+	popd
+
+ADD hello.c .
+RUN cl hello.c
