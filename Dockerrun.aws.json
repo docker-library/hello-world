@@ -1,0 +1,17 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "volumes": [
+    {
+      "name": "hello-world",
+      "host": {
+        "sourcePath": "/hello-world"
+      }
+    }
+  ],
+  "containerDefinitions": [
+    {
+      "name": "hello-world",
+      "image": "hello-world"
+    }
+  ]
+}
