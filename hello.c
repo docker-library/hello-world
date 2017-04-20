@@ -23,7 +23,7 @@ const char message[] =
 	"    to your terminal.\n"
 	"\n"
 	"To try something more ambitious, you can run an Ubuntu container with:\n"
-	" $ docker run -it ubuntu bash\n"
+	" $ docker container run -it ubuntu bash\n"
 	"\n"
 	"Share images, automate workflows, and more with a free Docker ID:\n"
 	" https://cloud.docker.com/\n"
