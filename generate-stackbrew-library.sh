@@ -28,31 +28,56 @@ dirCommit() {
 	)
 }
 
+generateCommit="$(fileCommit "$self")"
 cat <<-EOH
-# this file is generated via https://github.com/docker-library/hello-world/blob/$(fileCommit "$self")/$self
+# this file is generated via https://github.com/docker-library/hello-world/blob/$generateCommit/$self
 
 Maintainers: Tianon Gravi <admwiggin@gmail.com> (@tianon),
              Joseph Ferguson <yosifkit@gmail.com> (@yosifkit)
 GitRepo: https://github.com/docker-library/hello-world.git
+GitCommit: $generateCommit
 EOH
 
-commit="$(dirCommit "$image")"
+# prints "$2$1$3$1...$N"
+join() {
+	local sep="$1"; shift
+	local out; printf -v out "${sep//%/%%}%s" "$@"
+	echo "${out#$sep}"
+}
+
+arches=( *"/$image/hello" )
+arches=( "${arches[@]%"/$image/hello"}" )
 
 echo
 cat <<-EOE
 	Tags: latest
-	GitCommit: $commit
-	Directory: $image
+	Architectures: $(join ', ' "${arches[@]}")
 EOE
+for arch in "${arches[@]}"; do
+	commit="$(dirCommit "$arch/$image")"
+	cat <<-EOE
+		$arch-GitCommit: $commit
+		$arch-Directory: $arch/$image
+	EOE
+done
 
-if [ -d "$image/nanoserver" ]; then
-	commit="$(dirCommit "$image/nanoserver")"
+winArches=( *"/$image/nanoserver/hello.txt" )
+winArches=( "${winArches[@]%"/$image/nanoserver/hello.txt"}" )
 
+if [ "${#winArches[@]}" -gt 0 ]; then
 	echo
 	cat <<-EOE
 		Tags: nanoserver
-		GitCommit: $commit
-		Directory: $image/nanoserver
+		Architectures: $(join ', ' "${winArches[@]/#/windows-}")
+	EOE
+	for arch in "${winArches[@]}"; do
+		commit="$(dirCommit "$arch/$image/nanoserver")"
+		cat <<-EOE
+			windows-$arch-GitCommit: $commit
+			windows-$arch-Directory: $arch/$image/nanoserver
+		EOE
+	done
+	cat <<-EOE
 		Constraints: nanoserver
 	EOE
 fi
