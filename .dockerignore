@@ -1,7 +1,7 @@
 *.md
 *.sh
-*/hello
-*/nanoserver/hello.txt
+**/hello
+**/nanoserver/hello.txt
 .dockerignore
 .git
 Dockerfile*
