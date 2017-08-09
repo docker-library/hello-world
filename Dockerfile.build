@@ -1,16 +1,15 @@
 # explicitly use Debian for maximum cross-architecture compatibility
 FROM debian:stretch-slim
 
-#RUN dpkg --add-architecture i386
+RUN dpkg --add-architecture i386
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		gcc \
 		libc6-dev \
 		make \
-#		\
-#		gcc-multilib \
-#		libc6-dev-i386 \
-#		linux-libc-dev:i386 \
+		\
+		libc6-dev:i386 \
+		libgcc-6-dev:i386 \
 		\
 		libc6-dev-arm64-cross \
 		libc6-dev-armel-cross \
@@ -23,6 +22,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		gcc-arm-linux-gnueabihf \
 		gcc-powerpc64le-linux-gnu \
 		gcc-s390x-linux-gnu \
+		\
+		file \
 	&& rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/hello
@@ -52,7 +53,11 @@ RUN set -ex; \
 		CC='aarch64-linux-gnu-gcc' \
 		STRIP='aarch64-linux-gnu-strip'
 
-# TODO TARGET_ARCH='i386' (heinous package conflicts trying to get "gcc -m32"/"gcc-multilib" to work with all the cross-compiling gccs)
+RUN set -ex; \
+	make clean all test \
+		TARGET_ARCH='i386' \
+		CC='gcc -m32 -L/usr/lib/gcc/i686-linux-gnu/6' \
+		STRIP='x86_64-linux-gnu-strip'
 
 RUN set -ex; \
 	make clean all \
@@ -66,6 +71,6 @@ RUN set -ex; \
 		CC='s390x-linux-gnu-gcc' \
 		STRIP='s390x-linux-gnu-strip'
 
-RUN find \( -name 'hello' -or -name 'hello.txt' \) -exec ls -lh '{}' +
+RUN find \( -name 'hello' -or -name 'hello.txt' \) -exec file '{}' + -exec ls -lh '{}' +
 
-CMD ["./hello-world/hello"]
+CMD ["./amd64/hello-world/hello"]
