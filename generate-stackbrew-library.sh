@@ -50,7 +50,8 @@ arches=( "${arches[@]%"/$image/hello"}" )
 
 echo
 cat <<-EOE
-	Tags: latest
+	Tags: linux
+	SharedTags: latest
 	Architectures: $(join ', ' "${arches[@]}")
 EOE
 for arch in "${arches[@]}"; do
@@ -68,6 +69,7 @@ if [ "${#winArches[@]}" -gt 0 ]; then
 	echo
 	cat <<-EOE
 		Tags: nanoserver
+		SharedTags: latest
 		Architectures: $(join ', ' "${winArches[@]/#/windows-}")
 	EOE
 	for arch in "${winArches[@]}"; do
