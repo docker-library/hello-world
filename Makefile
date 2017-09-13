@@ -13,7 +13,11 @@ $(C_TARGETS): hello.c
 	$(STRIP) -R .comment -s '$@'
 	@if [ '$(TARGET_ARCH)' = 'amd64' ]; then \
 		mkdir -p '$(@D)/nanoserver'; \
-		'$@' | sed -e 's/an Ubuntu container/a Nano Server container/g' -e 's!ubuntu bash!microsoft/nanoserver powershell!g' > '$(@D)/nanoserver/hello.txt'; \
+		'$@' | sed \
+			-e 's/an Ubuntu container/a Windows Server container/g' \
+			-e 's!ubuntu bash!microsoft/windowsservercore powershell!g' \
+			-e 's![$$] docker!PS C:\\> docker!g' \
+			> '$(@D)/nanoserver/hello.txt'; \
 	fi
 
 .PHONY: clean
