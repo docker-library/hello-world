@@ -12,12 +12,14 @@ $(C_TARGETS): hello.c
 	$(CC) $(CFLAGS) -o '$@' -D DOCKER_IMAGE='"$(notdir $(@D))"' -D DOCKER_GREETING="\"$$(cat 'greetings/$(notdir $(@D)).txt')\"" '$<'
 	$(STRIP) -R .comment -s '$@'
 	@if [ '$(TARGET_ARCH)' = 'amd64' ]; then \
-		mkdir -p '$(@D)/nanoserver'; \
-		'$@' | sed \
-			-e 's/an Ubuntu container/a Windows Server container/g' \
-			-e 's!ubuntu bash!microsoft/windowsservercore powershell!g' \
-			-e 's![$$] docker!PS C:\\> docker!g' \
-			> '$(@D)/nanoserver/hello.txt'; \
+		for winVariant in nanoserver nanoserver1709; do \
+			mkdir -p "$(@D)/$$winVariant"; \
+			'$@' | sed \
+				-e 's/an Ubuntu container/a Windows Server container/g' \
+				-e 's!ubuntu bash!microsoft/windowsservercore powershell!g' \
+				-e 's![$$] docker!PS C:\\> docker!g' \
+				> "$(@D)/$$winVariant/hello.txt"; \
+		done; \
 	fi
 
 .PHONY: clean
