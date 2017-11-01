@@ -17,4 +17,4 @@ for h in amd64/*/hello; do
 	docker build -t hello-world:"test-$b" "$d"
 	docker run --rm hello-world:"test-$b"
 done
-ls -lh */*/{hello,nanoserver/hello.txt} || :
+ls -lh */*/{hello,nanoserver*/hello.txt} || :

@@ -62,24 +62,26 @@ for arch in "${arches[@]}"; do
 	EOE
 done
 
-winArches=( *"/$image/nanoserver/hello.txt" )
-winArches=( "${winArches[@]%"/$image/nanoserver/hello.txt"}" )
+for winVariant in nanoserver nanoserver1709; do
+	winArches=( *"/$image/$winVariant/hello.txt" )
+	winArches=( "${winArches[@]%"/$image/$winVariant/hello.txt"}" )
 
-if [ "${#winArches[@]}" -gt 0 ]; then
-	echo
-	cat <<-EOE
-		Tags: nanoserver
-		SharedTags: latest
-		Architectures: $(join ', ' "${winArches[@]/#/windows-}")
-	EOE
-	for arch in "${winArches[@]}"; do
-		commit="$(dirCommit "$arch/$image/nanoserver")"
+	if [ "${#winArches[@]}" -gt 0 ]; then
+		echo
 		cat <<-EOE
-			windows-$arch-GitCommit: $commit
-			windows-$arch-Directory: $arch/$image/nanoserver
+			Tags: $winVariant
+			SharedTags: latest
+			Architectures: $(join ', ' "${winArches[@]/#/windows-}")
 		EOE
-	done
-	cat <<-EOE
-		Constraints: nanoserver
-	EOE
-fi
+		for arch in "${winArches[@]}"; do
+			commit="$(dirCommit "$arch/$image/$winVariant")"
+			cat <<-EOE
+				windows-$arch-GitCommit: $commit
+				windows-$arch-Directory: $arch/$image/$winVariant
+			EOE
+		done
+		cat <<-EOE
+			Constraints: $winVariant
+		EOE
+	fi
+done
