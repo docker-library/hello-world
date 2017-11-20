@@ -12,7 +12,7 @@ $(C_TARGETS): hello.c
 	$(CC) $(CFLAGS) -o '$@' -D DOCKER_IMAGE='"$(notdir $(@D))"' -D DOCKER_GREETING="\"$$(cat 'greetings/$(notdir $(@D)).txt')\"" -D DOCKER_ARCH='"$(TARGET_ARCH)"' '$<'
 	$(STRIP) -R .comment -s '$@'
 	@if [ '$(TARGET_ARCH)' = 'amd64' ]; then \
-		for winVariant in nanoserver nanoserver1709; do \
+		for winVariant in nanoserver-sac2016 nanoserver-1709; do \
 			mkdir -p "$(@D)/$$winVariant"; \
 			'$@' | sed \
 				-e 's/[(]$(TARGET_ARCH)[)]/(windows-$(TARGET_ARCH))/g' \
