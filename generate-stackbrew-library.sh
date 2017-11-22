@@ -62,7 +62,7 @@ for arch in "${arches[@]}"; do
 	EOE
 done
 
-for winVariant in nanoserver nanoserver1709; do
+for winVariant in nanoserver-sac2016 nanoserver-1709; do
 	winArches=( *"/$image/$winVariant/hello.txt" )
 	winArches=( "${winArches[@]%"/$image/$winVariant/hello.txt"}" )
 
@@ -70,7 +70,7 @@ for winVariant in nanoserver nanoserver1709; do
 		echo
 		cat <<-EOE
 			Tags: $winVariant
-			SharedTags: latest
+			SharedTags: nanoserver, latest
 			Architectures: $(join ', ' "${winArches[@]/#/windows-}")
 		EOE
 		for arch in "${winArches[@]}"; do

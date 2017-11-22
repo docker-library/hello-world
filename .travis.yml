@@ -10,7 +10,7 @@ before_script:
 
 script:
   - ./update.sh
-  - test -z "$(git status --porcelain '**/hello' '**/nanoserver/hello.txt')"
+  - test -z "$(git status --porcelain '**/hello' '**/nanoserver*/hello.txt')"
   - travis_retry docker build -t "$image" amd64/hello-world
   - ~/official-images/test/run.sh "$image"
 
