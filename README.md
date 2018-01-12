@@ -6,6 +6,8 @@ The full readme is generated over in [docker-library/docs](https://github.com/do
 
 See a change merged here that doesn't show up on the Docker Hub yet? Check [the "library/hello-world" manifest file in the docker-library/official-images repo](https://github.com/docker-library/official-images/blob/master/library/hello-world), especially [PRs with the "library/hello-world" label on that repo](https://github.com/docker-library/official-images/labels/library%2Fhello-world). For more information about the official images process, see the [docker-library/official-images readme](https://github.com/docker-library/official-images/blob/master/README.md).
 
+Images are based on [empty `scratch` image](https://hub.docker.com/_/scratch/).
+
 ---
 
 -	[Travis CI:  
