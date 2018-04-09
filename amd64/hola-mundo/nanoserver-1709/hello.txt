@@ -15,7 +15,7 @@ To try something more ambitious, you can run a Windows Server container with:
  PS C:\> docker run -it microsoft/windowsservercore powershell
 
 Share images, automate workflows, and more with a free Docker ID:
- https://cloud.docker.com/
+ https://hub.docker.com/
 
 For more examples and ideas, visit:
  https://docs.docker.com/engine/userguide/
