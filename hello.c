@@ -31,7 +31,7 @@ const char message[] =
 	" $ docker run -it ubuntu bash\n"
 	"\n"
 	"Share images, automate workflows, and more with a free Docker ID:\n"
-	" https://cloud.docker.com/\n"
+	" https://hub.docker.com/\n"
 	"\n"
 	"For more examples and ideas, visit:\n"
 	" https://docs.docker.com/engine/userguide/\n"
