@@ -34,7 +34,7 @@ const char message[] =
 	" https://hub.docker.com/\n"
 	"\n"
 	"For more examples and ideas, visit:\n"
-	" https://docs.docker.com/\n"
+	" https://docs.docker.com/get-started/\n"
 	"\n";
 
 void _start() {
