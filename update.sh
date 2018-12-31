@@ -17,7 +17,7 @@ for h in */*/nanoserver-*/Dockerfile; do
 	nano="$(dirname "$h")"
 	nano="$(basename "$nano")"
 	nano="${nano#nanoserver-}"
-	sed -i 's!FROM .*!FROM microsoft/nanoserver:'"$nano"'!' "$h"
+	sed -i 's!FROM .*!FROM mcr.microsoft.com/windows/nanoserver:'"$nano"'!' "$h"
 done
 
 for h in amd64/*/hello; do
