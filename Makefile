@@ -13,7 +13,6 @@ $(C_TARGETS): hello.c
 	$(STRIP) -R .comment -s '$@'
 	@if [ '$(TARGET_ARCH)' = 'amd64' ]; then \
 		for winVariant in \
-			nanoserver-sac2016 \
 			nanoserver-1803 \
 			nanoserver-1809 \
 		; do \
