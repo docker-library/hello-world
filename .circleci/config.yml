@@ -1,0 +1,32 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: debian:stretch
+
+    environment:
+      IMAGE: "${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+      TAG: "0.1.$CIRCLE_BUILD_NUM"
+
+    steps:
+      - checkout
+
+      - setup_remote_docker:
+          docker_layer_caching: true
+
+      - run:
+          name: Show Environment
+          command: |
+            env | sort
+
+      - run:
+          name: Install Docker client
+          command: |
+            apt update
+            apt install -y docker.io
+
+      - run:
+          name: Build docker image
+          command: |
+            docker build -f Dockerfile.ld -t ${IMAGE}:${TAG} .
+            docker run --rm ${IMAGE}:${TAG} | grep "This message shows that your installation appears to be working correctly"
