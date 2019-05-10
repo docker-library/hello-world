@@ -20,13 +20,21 @@ jobs:
             env | sort
 
       - run:
+          name: Add docker deb repository
+          command: |
+            apt update
+            apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common
+            curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+            add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+
+      - run:
           name: Install Docker client
           command: |
             apt update
-            apt install -y docker.io
+            apt install -y docker-ce
 
       - run:
           name: Build docker image
           command: |
-            docker build -f Dockerfile.ld -t ${IMAGE}:${TAG} .
-            docker run --rm ${IMAGE}:${TAG} | grep "This message shows that your installation appears to be working correctly"
+            docker build -f Dockerfile.build -t $(eval echo ${IMAGE}:${TAG}) .
+            docker run --rm $(eval echo ${IMAGE}:${TAG}) | grep "This message shows that your installation appears to be working correctly"
