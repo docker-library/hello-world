@@ -1,5 +1,5 @@
 # explicitly use Debian for maximum cross-architecture compatibility
-FROM debian:stretch-slim
+FROM debian:buster-slim
 
 RUN dpkg --add-architecture i386
 
@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		make \
 		\
 		libc6-dev:i386 \
-		libgcc-6-dev:i386 \
+		libgcc-8-dev:i386 \
 		\
 		libc6-dev-arm64-cross \
 		libc6-dev-armel-cross \
@@ -56,7 +56,7 @@ RUN set -ex; \
 RUN set -ex; \
 	make clean all test \
 		TARGET_ARCH='i386' \
-		CC='gcc -m32 -L/usr/lib/gcc/i686-linux-gnu/6' \
+		CC='gcc -m32 -L/usr/lib/gcc/i686-linux-gnu/8' \
 		STRIP='x86_64-linux-gnu-strip'
 
 RUN set -ex; \
