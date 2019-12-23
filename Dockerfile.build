@@ -16,12 +16,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		libc6-dev-armhf-cross \
 		libc6-dev-ppc64el-cross \
 		libc6-dev-s390x-cross \
+		libc6-dev-mips64el-cross \
 		\
 		gcc-aarch64-linux-gnu \
 		gcc-arm-linux-gnueabi \
 		gcc-arm-linux-gnueabihf \
 		gcc-powerpc64le-linux-gnu \
 		gcc-s390x-linux-gnu \
+		gcc-mips64el-linux-gnuabi64 \
 		\
 		file \
 	&& rm -rf /var/lib/apt/lists/*
@@ -70,6 +72,12 @@ RUN set -ex; \
 		TARGET_ARCH='s390x' \
 		CC='s390x-linux-gnu-gcc' \
 		STRIP='s390x-linux-gnu-strip'
+
+RUN set -ex; \
+	make clean all \
+		TARGET_ARCH='mips64el' \
+		CC='mips64el-linux-gnuabi64-gcc' \
+		STRIP='mips64el-linux-gnuabi64-strip'
 
 RUN find \( -name 'hello' -or -name 'hello.txt' \) -exec file '{}' + -exec ls -lh '{}' +
 

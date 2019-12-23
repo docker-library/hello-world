@@ -5,6 +5,10 @@ CC := gcc
 CFLAGS := -static -Os -nostartfiles -fno-asynchronous-unwind-tables
 STRIP := strip
 
+ifeq ('$(TARGET_ARCH)','mips64el')
+	CFLAGS += -mno-abicalls -fno-pic
+endif
+
 .PHONY: all
 all: $(C_TARGETS)
 
@@ -13,7 +17,6 @@ $(C_TARGETS): hello.c
 	$(STRIP) -R .comment -s '$@'
 	@if [ '$(TARGET_ARCH)' = 'amd64' ]; then \
 		for winVariant in \
-			nanoserver-1803 \
 			nanoserver-1809 \
 		; do \
 			mkdir -p "$(@D)/$$winVariant"; \
