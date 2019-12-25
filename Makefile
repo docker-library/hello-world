@@ -5,6 +5,11 @@ CC := gcc
 CFLAGS := -static -Os -nostartfiles -fno-asynchronous-unwind-tables
 STRIP := strip
 
+ifeq ('$(TARGET_ARCH)','mips64el')
+	CFLAGS += -mno-abicalls -fno-pic
+endif
+
+
 .PHONY: all
 all: $(C_TARGETS)
 
