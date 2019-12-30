@@ -7,7 +7,7 @@ set -x
 
 docker build -f Dockerfile.build -t hello-world:build .
 
-rm -rf */hello */nanoserver*/hello.txt
+find */ \( -name hello -or -name hello.txt \) -delete
 docker run --rm hello-world:build sh -c 'find \( -name hello -or -name hello.txt \) -print0 | xargs -0 tar --create' | tar --extract --verbose
 
 find -name hello -type f -exec dirname '{}' ';' | xargs -n1 -i'{}' cp Dockerfile-linux.template '{}/Dockerfile'

@@ -1,16 +1,30 @@
 TARGET_ARCH := amd64
 C_TARGETS := $(addsuffix hello, $(wildcard $(TARGET_ARCH)/*/))
 
-CC := gcc
-CFLAGS := -static -Os -nostartfiles -fno-asynchronous-unwind-tables
-STRIP := strip
+export CFLAGS := -Os -fdata-sections -ffunction-sections -s
+STRIP := $(CROSS_COMPILE)strip
 
 .PHONY: all
 all: $(C_TARGETS)
 
-$(C_TARGETS): hello.c
-	$(CC) $(CFLAGS) -o '$@' -D DOCKER_IMAGE='"$(notdir $(@D))"' -D DOCKER_GREETING="\"$$(cat 'greetings/$(notdir $(@D)).txt')\"" -D DOCKER_ARCH='"$(TARGET_ARCH)"' '$<'
-	$(STRIP) -R .comment -s '$@'
+MUSL_SRC := /usr/local/src/musl
+MUSL_DIR := $(CURDIR)/musl/$(TARGET_ARCH)
+MUSL_PREFIX := $(MUSL_DIR)/prefix
+MUSL_GCC := $(MUSL_PREFIX)/bin/musl-gcc
+
+$(MUSL_GCC):
+	mkdir -p '$(MUSL_DIR)'
+	cd '$(MUSL_DIR)' && '$(MUSL_SRC)/configure' --disable-shared --prefix='$(MUSL_PREFIX)' > /dev/null
+	$(MAKE) -C '$(MUSL_DIR)' -j '$(shell nproc)' install > /dev/null
+
+$(C_TARGETS): hello.c $(MUSL_GCC)
+	$(MUSL_GCC) $(CFLAGS) -Wl,--gc-sections -static \
+		-o '$@' \
+		-D DOCKER_IMAGE='"$(notdir $(@D))"' \
+		-D DOCKER_GREETING="\"$$(cat 'greetings/$(notdir $(@D)).txt')\"" \
+		-D DOCKER_ARCH='"$(TARGET_ARCH)"' \
+		'$<'
+	$(STRIP) --strip-all --remove-section=.comment '$@'
 	@if [ '$(TARGET_ARCH)' = 'amd64' ]; then \
 		for winVariant in \
 			nanoserver-1809 \
@@ -27,7 +41,7 @@ $(C_TARGETS): hello.c
 
 .PHONY: clean
 clean:
-	-rm -vrf $(C_TARGETS)
+	-rm -vrf $(C_TARGETS) $(MUSL_DIR)
 
 .PHONY: test
 test: $(C_TARGETS)
