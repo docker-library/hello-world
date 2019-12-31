@@ -16,6 +16,7 @@ RUN set -eux; \
 		libc6-dev-armel-cross \
 		libc6-dev-armhf-cross \
 		libc6-dev-i386-cross \
+		libc6-dev-mips64el-cross \
 		libc6-dev-ppc64el-cross \
 		libc6-dev-s390x-cross \
 		\
@@ -23,6 +24,7 @@ RUN set -eux; \
 		gcc-arm-linux-gnueabi \
 		gcc-arm-linux-gnueabihf \
 		gcc-i686-linux-gnu \
+		gcc-mips64el-linux-gnuabi64 \
 		gcc-powerpc64le-linux-gnu \
 		gcc-s390x-linux-gnu \
 		\
@@ -73,6 +75,11 @@ RUN set -ex; \
 	make clean all test \
 		TARGET_ARCH='i386' \
 		CROSS_COMPILE='i686-linux-gnu-'
+
+RUN set -ex; \
+	make clean all \
+		TARGET_ARCH='mips64le' \
+		CROSS_COMPILE='mips64el-linux-gnuabi64-'
 
 RUN set -ex; \
 	make clean all \
