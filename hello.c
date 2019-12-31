@@ -1,5 +1,5 @@
-//#include <unistd.h>
 #include <sys/syscall.h>
+#include <unistd.h>
 
 #ifndef DOCKER_IMAGE
 	#define DOCKER_IMAGE "hello-world"
@@ -37,10 +37,11 @@ const char message[] =
 	" https://docs.docker.com/get-started/\n"
 	"\n";
 
-void _start() {
+int main() {
 	//write(1, message, sizeof(message) - 1);
 	syscall(SYS_write, 1, message, sizeof(message) - 1);
 
 	//_exit(0);
-	syscall(SYS_exit, 0);
+	//syscall(SYS_exit, 0);
+	return 0;
 }
