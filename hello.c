@@ -39,7 +39,7 @@ const char message[] =
 
 int main() {
 	//write(1, message, sizeof(message) - 1);
-	syscall(SYS_write, 1, message, sizeof(message) - 1);
+	syscall(SYS_write, STDOUT_FILENO, message, sizeof(message) - 1);
 
 	//_exit(0);
 	//syscall(SYS_exit, 0);
