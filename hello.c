@@ -2,11 +2,11 @@
 #include <unistd.h>
 
 #ifndef DOCKER_IMAGE
-	#define DOCKER_IMAGE "hello-world"
+	#define DOCKER_IMAGE "my-hello-world"
 #endif
 
 #ifndef DOCKER_GREETING
-	#define DOCKER_GREETING "Hello from Docker!"
+	#define DOCKER_GREETING "Dockerから、こんにちは！!"
 #endif
 
 #ifndef DOCKER_ARCH
@@ -16,24 +16,23 @@
 const char message[] =
 	"\n"
 	DOCKER_GREETING "\n"
-	"This message shows that your installation appears to be working correctly.\n"
+	"このメッセージが表示されていれば、インストールは正常終了しました。\n"
 	"\n"
-	"To generate this message, Docker took the following steps:\n"
-	" 1. The Docker client contacted the Docker daemon.\n"
-	" 2. The Docker daemon pulled the \"" DOCKER_IMAGE "\" image from the Docker Hub.\n"
+	"メッセージを表示するために、Dockerは以下の手順を処理しました：\n"
+	" 1. DockerクライアントはDockerデーモンに接続。\n"
+	" 2. DockerデーモンはDocker Hubから\"" DOCKER_IMAGE "\" イメージをダウンロード。\n"
 	"    (" DOCKER_ARCH ")\n"
-	" 3. The Docker daemon created a new container from that image which runs the\n"
-	"    executable that produces the output you are currently reading.\n"
-	" 4. The Docker daemon streamed that output to the Docker client, which sent it\n"
-	"    to your terminal.\n"
+	" 3. Dockerデーモンはダウンロードしたイメージから、実行可能な新しいコンテナを作成し、\n"
+	"    今あなたが読んでいるこのメッセージを表示します。\n"
+	" 4. Dockerデーモンは出力結果をDockerクライアントに流し、あなたのターミナルに出力します。\n"
 	"\n"
-	"To try something more ambitious, you can run an Ubuntu container with:\n"
+	"さらにチャレンジするには、Ubuntu コンテナを次のコマンドで動かしましょう：\n"
 	" $ docker run -it ubuntu bash\n"
 	"\n"
-	"Share images, automate workflows, and more with a free Docker ID:\n"
+	"イメージの共有、自動ワークフローなどの機能は、フリーなDocker IDで行えます：\n"
 	" https://hub.docker.com/\n"
 	"\n"
-	"For more examples and ideas, visit:\n"
+	"更なる例や考え方は、ドキュメントをご覧ください：\n"
 	" https://docs.docker.com/get-started/\n"
 	"\n";
 
