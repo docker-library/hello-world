@@ -1,3 +1,5 @@
+SHELL := bash -Eeuo pipefail
+
 TARGET_ARCH := amd64
 C_TARGETS := $(addsuffix hello, $(wildcard $(TARGET_ARCH)/*/))
 
