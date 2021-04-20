@@ -30,6 +30,7 @@ $(C_TARGETS): hello.c $(MUSL_GCC)
 	@if [ '$(TARGET_ARCH)' = 'amd64' ]; then \
 		for winVariant in \
 			nanoserver-1809 \
+			nanoserver-2009 \
 		; do \
 			mkdir -p "$(@D)/$$winVariant"; \
 			'$@' | sed \
