@@ -32,11 +32,11 @@ RUN set -eux; \
 	; \
 	rm -rf /var/lib/apt/lists/*
 
-# https://www.musl-libc.org/download.html
+# https://musl.libc.org/releases.html
 ENV MUSL_VERSION 1.1.24
 RUN set -eux; \
-	wget -O musl.tgz.asc "https://www.musl-libc.org/releases/musl-$MUSL_VERSION.tar.gz.asc"; \
-	wget -O musl.tgz "https://www.musl-libc.org/releases/musl-$MUSL_VERSION.tar.gz"; \
+	wget -O musl.tgz.asc "https://musl.libc.org/releases/musl-$MUSL_VERSION.tar.gz.asc"; \
+	wget -O musl.tgz "https://musl.libc.org/releases/musl-$MUSL_VERSION.tar.gz"; \
 	\
 	export GNUPGHOME="$(mktemp -d)"; \
 	gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys '836489290BB6B70F99FFDA0556BCDB593020450F'; \
