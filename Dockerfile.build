@@ -39,7 +39,7 @@ RUN set -eux; \
 	wget -O musl.tgz "https://musl.libc.org/releases/musl-$MUSL_VERSION.tar.gz"; \
 	\
 	export GNUPGHOME="$(mktemp -d)"; \
-	gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys '836489290BB6B70F99FFDA0556BCDB593020450F'; \
+	gpg --batch --keyserver keyserver.ubuntu.com --recv-keys '836489290BB6B70F99FFDA0556BCDB593020450F'; \
 	gpg --batch --verify musl.tgz.asc musl.tgz; \
 	gpgconf --kill all; \
 	rm -rf "$GNUPGHOME" musl.tgz.asc; \
