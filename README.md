@@ -2,7 +2,7 @@
 
 ## Maintained by: [the Docker Community](https://github.com/docker-library/hello-world)
 
-This is the Git repo of the [Docker "Official Image"](https://github.com/docker-library/official-images#what-are-official-images) for [`hello-world`](https://hub.docker.com/_/hello-world/) (not to be confused with any official `hello-world` image provided by `hello-world` upstream). See [the Docker Hub page](https://hub.docker.com/_/hello-world/) for the full readme on how to use this Docker image and for information regarding contributing and issues.
+This is the Git repo of the [Docker "Official Image"](https://github.com/docker-library/official-images#what-are-official-images) for [`hello-world`](https://hub.docker.com/_/hello-world/). See [the Docker Hub page](https://hub.docker.com/_/hello-world/) for the full readme on how to use this Docker image and for information regarding contributing and issues.
 
 The [full image description on Docker Hub](https://hub.docker.com/_/hello-world/) is generated/maintained over in [the docker-library/docs repository](https://github.com/docker-library/docs), specifically in [the `hello-world` directory](https://github.com/docker-library/docs/tree/master/hello-world).
 
