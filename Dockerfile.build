@@ -18,6 +18,7 @@ RUN set -eux; \
 		libc6-dev-i386-cross \
 		libc6-dev-mips64el-cross \
 		libc6-dev-ppc64el-cross \
+		libc6-dev-riscv64-cross \
 		libc6-dev-s390x-cross \
 		\
 		gcc-aarch64-linux-gnu \
@@ -26,6 +27,7 @@ RUN set -eux; \
 		gcc-i686-linux-gnu \
 		gcc-mips64el-linux-gnuabi64 \
 		gcc-powerpc64le-linux-gnu \
+		gcc-riscv64-linux-gnu \
 		gcc-s390x-linux-gnu \
 		\
 		file \
@@ -86,6 +88,11 @@ RUN set -ex; \
 		TARGET_ARCH='ppc64le' \
 		CROSS_COMPILE='powerpc64le-linux-gnu-' \
 		CFLAGS+='-mlong-double-64'
+
+RUN set -ex; \
+	make clean all \
+		TARGET_ARCH='riscv64' \
+		CROSS_COMPILE='riscv64-linux-gnu-'
 
 RUN set -ex; \
 	make clean all \
