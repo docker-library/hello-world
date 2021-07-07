@@ -1,6 +1,7 @@
 SHELL := bash -Eeuo pipefail
 
 TARGET_ARCH := amd64
+export ARCH_TEST :=
 C_TARGETS := $(addsuffix hello, $(wildcard $(TARGET_ARCH)/*/))
 
 export CFLAGS := -Os -fdata-sections -ffunction-sections -s
@@ -48,6 +49,10 @@ clean:
 .PHONY: test
 test: $(C_TARGETS)
 	@for b in $^; do \
-		( set -x && "./$$b" ); \
-		( set -x && "./$$b" | grep -q '"'"$$(basename "$$(dirname "$$b")")"'"' ); \
+		if [ -n "$$ARCH_TEST" ] && command -v arch-test > /dev/null && arch-test "$$ARCH_TEST" > /dev/null; then \
+			( set -x && "./$$b" ); \
+			( set -x && "./$$b" | grep -q '"'"$$(basename "$$(dirname "$$b")")"'"' ); \
+		else \
+			echo >&2 "warning: $$TARGET_ARCH ($$ARCH_TEST) not supported; skipping test"; \
+		fi; \
 	done
