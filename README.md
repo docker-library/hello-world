@@ -1,3 +1,5 @@
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/docker-library/hello-world)
+
 # https://github.com/docker-library/hello-world
 
 ## Maintained by: [the Docker Community](https://github.com/docker-library/hello-world)
