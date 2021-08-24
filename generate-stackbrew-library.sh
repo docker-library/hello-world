@@ -62,7 +62,10 @@ for arch in "${arches[@]}"; do
 	EOE
 done
 
-for winVariant in nanoserver-1809; do
+for winVariant in \
+	nanoserver-ltsc2022 \
+	nanoserver-1809 \
+; do
 	winArches=( *"/$image/$winVariant/hello.txt" )
 	winArches=( "${winArches[@]%"/$image/$winVariant/hello.txt"}" )
 
