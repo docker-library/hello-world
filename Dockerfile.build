@@ -1,5 +1,5 @@
 # explicitly use Debian for maximum cross-architecture compatibility
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 
 RUN set -eux; \
 	apt-get update; \
