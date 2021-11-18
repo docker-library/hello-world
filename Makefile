@@ -37,7 +37,7 @@ $(C_TARGETS): hello.c $(MUSL_GCC)
 			'$@' | sed \
 				-e 's/[(]$(TARGET_ARCH)[)]/(windows-$(TARGET_ARCH), '"$$winVariant"')/g' \
 				-e 's/an Ubuntu container/a Windows Server container/g' \
-				-e 's!ubuntu bash!mcr.microsoft.com/windows/servercore:ltsc2019 powershell!g' \
+				-e 's!ubuntu bash!mcr.microsoft.com/windows/servercore:'"$${winVariant##*-}"' powershell!g' \
 				-e 's![$$] docker!PS C:\\> docker!g' \
 				> "$(@D)/$$winVariant/hello.txt"; \
 		done; \
