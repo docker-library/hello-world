@@ -12,7 +12,7 @@ To generate this message, Docker took the following steps:
     to your terminal.
 
 To try something more ambitious, you can run a Windows Server container with:
- PS C:\> docker run -it mcr.microsoft.com/windows/servercore:ltsc2019 powershell
+ PS C:\> docker run -it mcr.microsoft.com/windows/servercore:1809 powershell
 
 Share images, automate workflows, and more with a free Docker ID:
  https://hub.docker.com/
