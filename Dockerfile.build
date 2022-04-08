@@ -36,7 +36,7 @@ RUN set -eux; \
 	rm -rf /var/lib/apt/lists/*
 
 # https://musl.libc.org/releases.html
-ENV MUSL_VERSION 1.2.2
+ENV MUSL_VERSION 1.2.3
 RUN set -eux; \
 	wget -O musl.tgz.asc "https://musl.libc.org/releases/musl-$MUSL_VERSION.tar.gz.asc"; \
 	wget -O musl.tgz "https://musl.libc.org/releases/musl-$MUSL_VERSION.tar.gz"; \
