@@ -57,3 +57,7 @@ test: $(C_TARGETS)
 			echo >&2 "warning: $$TARGET_ARCH ($$ARCH_TEST) not supported; skipping test"; \
 		fi; \
 	done
+
+.PHONY: build-multi-arch
+build-multi-arch:
+	docker buildx build --platform linux/amd64,linux/s390x,linux/arm/v7,linux/ppc64le,linux/arm/v5,linux/arm64/v8 -t hello-world:latest .
