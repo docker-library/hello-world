@@ -64,12 +64,21 @@ RUN set -ex; \
 	make clean all test \
 		TARGET_ARCH='arm32v5' \
 		CROSS_COMPILE='arm-linux-gnueabi-' \
+#		CFLAGS+='-march=armv5te' \
 		ARCH_TEST='armel'
+
+RUN set -ex; \
+	make clean all test \
+		TARGET_ARCH='arm32v6' \
+		CROSS_COMPILE='arm-linux-gnueabi-' \
+		CFLAGS+='-march=armv6+fp' \
+		ARCH_TEST='armhf'
 
 RUN set -ex; \
 	make clean all test \
 		TARGET_ARCH='arm32v7' \
 		CROSS_COMPILE='arm-linux-gnueabihf-' \
+#		CFLAGS+='-march=armv7-a+fp' \
 		ARCH_TEST='armhf'
 
 RUN set -ex; \
