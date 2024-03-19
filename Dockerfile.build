@@ -70,8 +70,8 @@ RUN set -ex; \
 RUN set -ex; \
 	make clean all test \
 		TARGET_ARCH='arm32v6' \
-		CROSS_COMPILE='arm-linux-gnueabihf-' \
-		CFLAGS+='-marm -march=armv6+fp' \
+		CROSS_COMPILE='arm-linux-gnueabi-' \
+		CFLAGS+='-march=armv6+fp' \
 		ARCH_TEST='armhf'
 
 RUN set -ex; \
