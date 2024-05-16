@@ -1,6 +1,6 @@
 steps:
 
-on:
+  on:
   workflow_dispatch:
 
   - name: Log in to Azure
