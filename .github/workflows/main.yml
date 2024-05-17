@@ -1,8 +1,10 @@
 name: Azure Container Apps Deploy
 
 on:
-  workflow_dispatch:
-  
+  push:
+    branches:
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,6 +16,7 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
 
       - name: Build and deploy Container App
         uses: azure/container-apps-deploy-action@v1
