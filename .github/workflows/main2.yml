@@ -18,7 +18,7 @@ jobs:
       - name: Build and deploy Container App
         uses: azure/container-apps-deploy-action@v1
         with:
-          appSourcePath: ${{ github.workspace }}/src
+          appSourcePath: ${{ github.workspace }}
           acrName: nicecontainerreg
           containerAppName: aca-nh-test-01
           resourceGroup: rg-nh-test-02
