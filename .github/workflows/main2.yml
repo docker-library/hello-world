@@ -20,5 +20,5 @@ jobs:
         with:
           appSourcePath: ${{ github.workspace }}/src
           acrName: nicecontainerreg
-          containerAppName: cnr-nh-test-01
-          resourceGroup: rg-nh-test-01
+          containerAppName: aca-nh-test-01
+          resourceGroup: rg-nh-test-02
