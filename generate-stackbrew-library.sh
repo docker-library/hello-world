@@ -63,6 +63,7 @@ for arch in "${arches[@]}"; do
 done
 
 for winVariant in \
+	nanoserver-ltsc2025 \
 	nanoserver-ltsc2022 \
 	nanoserver-1809 \
 ; do

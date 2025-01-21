@@ -31,6 +31,7 @@ $(C_TARGETS): hello.c $(MUSL_GCC)
 	$(STRIP) --strip-all --remove-section=.comment '$@'
 	@if [ '$(TARGET_ARCH)' = 'amd64' ]; then \
 		for winVariant in \
+			nanoserver-ltsc2025 \
 			nanoserver-ltsc2022 \
 			nanoserver-1809 \
 		; do \
