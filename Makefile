@@ -4,7 +4,8 @@ TARGET_ARCH := amd64
 export ARCH_TEST :=
 C_TARGETS := $(addsuffix hello, $(wildcard $(TARGET_ARCH)/*/))
 
-export CFLAGS := -Os -fdata-sections -ffunction-sections -s
+# norelro: https://stackoverflow.com/a/59084373/433558
+export CFLAGS := -Os -fdata-sections -ffunction-sections -Wl,-z,norelro -s $(EXTRA_CFLAGS)
 STRIP := $(CROSS_COMPILE)strip
 
 .PHONY: all
