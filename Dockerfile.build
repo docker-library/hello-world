@@ -1,5 +1,5 @@
 # explicitly use Debian for maximum cross-architecture compatibility
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 RUN set -eux; \
 	apt-get update; \
@@ -36,7 +36,7 @@ RUN set -eux; \
 	rm -rf /var/lib/apt/lists/*
 
 # https://musl.libc.org/releases.html
-ENV MUSL_VERSION 1.2.4
+ENV MUSL_VERSION 1.2.5
 RUN set -eux; \
 	wget -O musl.tgz.asc "https://musl.libc.org/releases/musl-$MUSL_VERSION.tar.gz.asc"; \
 	wget -O musl.tgz "https://musl.libc.org/releases/musl-$MUSL_VERSION.tar.gz"; \
@@ -64,21 +64,21 @@ RUN set -ex; \
 	make clean all test \
 		TARGET_ARCH='arm32v5' \
 		CROSS_COMPILE='arm-linux-gnueabi-' \
-#		CFLAGS+='-march=armv5te' \
+#		EXTRA_CFLAGS='-march=armv5te' \
 		ARCH_TEST='armel'
 
 RUN set -ex; \
 	make clean all test \
 		TARGET_ARCH='arm32v6' \
 		CROSS_COMPILE='arm-linux-gnueabi-' \
-		CFLAGS+='-march=armv6+fp' \
+		EXTRA_CFLAGS='-march=armv6+fp' \
 		ARCH_TEST='armhf'
 
 RUN set -ex; \
 	make clean all test \
 		TARGET_ARCH='arm32v7' \
 		CROSS_COMPILE='arm-linux-gnueabihf-' \
-#		CFLAGS+='-march=armv7-a+fp' \
+#		EXTRA_CFLAGS='-march=armv7-a+fp' \
 		ARCH_TEST='armhf'
 
 RUN set -ex; \
@@ -103,7 +103,7 @@ RUN set -ex; \
 	make clean all test \
 		TARGET_ARCH='ppc64le' \
 		CROSS_COMPILE='powerpc64le-linux-gnu-' \
-		CFLAGS+='-mlong-double-64' \
+		EXTRA_CFLAGS='-mlong-double-64' \
 		ARCH_TEST='ppc64el'
 
 RUN set -ex; \
