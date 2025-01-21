@@ -20,9 +20,7 @@ jobs:
       - name: Update Binaries
         run: ./update.sh
       - name: Verify Changes
-        run: |
-          changes="$(git status --porcelain '**/hello' '**/nanoserver*/hello.txt')"
-          test -z "$changes"
+        run: git diff --exit-code
 
   generate-jobs:
     needs: verify
