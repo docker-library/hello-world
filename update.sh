@@ -13,14 +13,14 @@ docker run --rm hello-world:build sh -c 'find \( -name hello -or -name hello.txt
 find -name hello -type f -exec dirname '{}' ';' | xargs -n1 -i'{}' cp Dockerfile-linux.template '{}/Dockerfile'
 find -name hello.txt -type f -exec dirname '{}' ';' | xargs -n1 -i'{}' cp Dockerfile-windows.template '{}/Dockerfile'
 
-for h in */*/nanoserver-*/Dockerfile; do
+for h in */nanoserver-*/Dockerfile; do
 	nano="$(dirname "$h")"
 	nano="$(basename "$nano")"
 	nano="${nano#nanoserver-}"
 	sed -i 's!FROM .*!FROM mcr.microsoft.com/windows/nanoserver:'"$nano"'!' "$h"
 done
 
-for h in .host-arch/*/hello; do
+for h in .host-arch/hello; do
 	d="$(dirname "$h")"
 	b="$(basename "$d")"
 	"$h" > /dev/null
@@ -28,4 +28,4 @@ for h in .host-arch/*/hello; do
 	docker run --rm hello-world:"test-$b"
 done
 
-ls -lh */*/{hello,nanoserver*/hello.txt} || :
+ls -lh */{hello,nanoserver*/hello.txt} || :

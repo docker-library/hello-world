@@ -2,14 +2,14 @@ SHELL := bash -Eeuo pipefail
 
 TARGET_ARCH := amd64
 export ARCH_TEST :=
-C_TARGETS := $(addsuffix hello, $(wildcard $(TARGET_ARCH)/*/))
+HELLO := $(TARGET_ARCH)/hello
 
 # norelro: https://stackoverflow.com/a/59084373/433558
 export CFLAGS := -Os -fdata-sections -ffunction-sections -Wl,-z,norelro -s $(EXTRA_CFLAGS)
 STRIP := $(CROSS_COMPILE)strip
 
 .PHONY: all
-all: $(C_TARGETS)
+all: $(HELLO)
 
 MUSL_SRC := /usr/local/src/musl
 MUSL_DIR := $(CURDIR)/musl/$(TARGET_ARCH)
@@ -23,11 +23,9 @@ $(MUSL_GCC):
 .PHONY: musl
 musl: $(MUSL_GCC)
 
-$(C_TARGETS): hello.c $(MUSL_GCC)
+$(HELLO): hello.c $(MUSL_GCC)
 	$(MUSL_GCC) $(CFLAGS) -Wl,--gc-sections -static \
 		-o '$@' \
-		-D DOCKER_IMAGE='"$(notdir $(@D))"' \
-		-D DOCKER_GREETING="\"$$(cat 'greetings/$(notdir $(@D)).txt')\"" \
 		-D DOCKER_ARCH='"$(TARGET_ARCH)"' \
 		'$<'
 	$(STRIP) --strip-all --remove-section=.comment '$@'
@@ -48,14 +46,13 @@ $(C_TARGETS): hello.c $(MUSL_GCC)
 
 .PHONY: clean
 clean:
-	-rm -vrf $(C_TARGETS) $(MUSL_DIR)
+	-rm -vrf $(HELLO) $(MUSL_DIR)
 
 .PHONY: test
-test: $(C_TARGETS)
+test: $(HELLO)
 	@for b in $^; do \
 		if [ -n "$$ARCH_TEST" ] && command -v arch-test > /dev/null && arch-test "$$ARCH_TEST" > /dev/null; then \
 			( set -x && "./$$b" ); \
-			( set -x && "./$$b" | grep -q '"'"$$(basename "$$(dirname "$$b")")"'"' ); \
 			if [ ! -e .host-arch ] && arch-test -n "$$ARCH_TEST" > /dev/null; then \
 				ln -svfT "$${b%%/*}" .host-arch; \
 			fi; \
