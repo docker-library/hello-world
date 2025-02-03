@@ -1,0 +1,1 @@
+{"config":{"Cmd":["/hello"],"Env":["PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"],"WorkingDir":"/"},"os":"linux","architecture":"arm","rootfs":{"diff_ids":["sha256:76fcfbdbabb979e6b3a48c0622295ab7a151d73912fbc1fbecfa259cd998fb3a"],"type":"layers"},"created":"2025-01-21T23:32:32Z"}

@@ -1,0 +1,1 @@
+{"config":{"Cmd":["/hello"],"Env":["PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"],"WorkingDir":"/"},"os":"linux","architecture":"ppc64le","rootfs":{"diff_ids":["sha256:26da952173876a98740287d45e35c0c56a93c15dab9c72f677a3a16db2e9439b"],"type":"layers"},"created":"2025-01-21T23:32:32Z"}

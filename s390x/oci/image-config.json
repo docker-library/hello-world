@@ -1,0 +1,1 @@
+{"config":{"Cmd":["/hello"],"Env":["PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"],"WorkingDir":"/"},"os":"linux","architecture":"s390x","rootfs":{"diff_ids":["sha256:e3be82c23de0567f7699a1efae9b4c1ba578effb685c015527c9377b1289c12c"],"type":"layers"},"created":"2025-01-21T23:32:32Z"}
