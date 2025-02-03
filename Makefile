@@ -55,6 +55,9 @@ test: $(C_TARGETS)
 		if [ -n "$$ARCH_TEST" ] && command -v arch-test > /dev/null && arch-test "$$ARCH_TEST" > /dev/null; then \
 			( set -x && "./$$b" ); \
 			( set -x && "./$$b" | grep -q '"'"$$(basename "$$(dirname "$$b")")"'"' ); \
+			if [ ! -e .host-arch ] && arch-test -n "$$ARCH_TEST" > /dev/null; then \
+				ln -svfT "$${b%%/*}" .host-arch; \
+			fi; \
 		else \
 			echo >&2 "warning: $$TARGET_ARCH ($$ARCH_TEST) not supported; skipping test"; \
 		fi; \

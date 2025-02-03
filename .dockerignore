@@ -4,5 +4,6 @@
 *.sh
 .dockerignore
 .git*
+.host-arch
 Dockerfile*
 LICENSE
