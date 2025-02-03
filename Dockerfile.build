@@ -3,6 +3,7 @@ FROM debian:bookworm-slim
 
 RUN set -eux; \
 	apt-get update; \
+	dpkgArch="$(dpkg --print-architecture)"; \
 	apt-get install -y --no-install-recommends \
 		ca-certificates \
 		gnupg \
@@ -12,6 +13,8 @@ RUN set -eux; \
 		libc6-dev \
 		make \
 		\
+# these are all "arch:all" so we can just install all of them
+		libc6-dev-amd64-cross \
 		libc6-dev-arm64-cross \
 		libc6-dev-armel-cross \
 		libc6-dev-armhf-cross \
@@ -21,7 +24,9 @@ RUN set -eux; \
 		libc6-dev-riscv64-cross \
 		libc6-dev-s390x-cross \
 		\
-		gcc-aarch64-linux-gnu \
+# the cross-compilers are particular about which architectures they build for, so for now we'll only support a host architecture of amd64 or arm64
+		$([ "$dpkgArch" = 'amd64' ] || echo 'gcc-x86-64-linux-gnu') \
+		$([ "$dpkgArch" = 'arm64' ] || echo 'gcc-aarch64-linux-gnu') \
 		gcc-arm-linux-gnueabi \
 		gcc-arm-linux-gnueabihf \
 		gcc-i686-linux-gnu \
@@ -54,32 +59,18 @@ RUN set -eux; \
 WORKDIR /usr/src/hello
 COPY . .
 
+# the following steps are grouped into "architecture families" and roughly ordered in a descending compatibility way such that we end up with the most accurate ".host-arch" symlink we can reasonably get
+
 RUN set -ex; \
 	make clean all test \
 		TARGET_ARCH='amd64' \
 		CROSS_COMPILE='x86_64-linux-gnu-' \
 		ARCH_TEST='amd64'
-
 RUN set -ex; \
 	make clean all test \
-		TARGET_ARCH='arm32v5' \
-		CROSS_COMPILE='arm-linux-gnueabi-' \
-#		EXTRA_CFLAGS='-march=armv5te' \
-		ARCH_TEST='armel'
-
-RUN set -ex; \
-	make clean all test \
-		TARGET_ARCH='arm32v6' \
-		CROSS_COMPILE='arm-linux-gnueabi-' \
-		EXTRA_CFLAGS='-march=armv6+fp' \
-		ARCH_TEST='armhf'
-
-RUN set -ex; \
-	make clean all test \
-		TARGET_ARCH='arm32v7' \
-		CROSS_COMPILE='arm-linux-gnueabihf-' \
-#		EXTRA_CFLAGS='-march=armv7-a+fp' \
-		ARCH_TEST='armhf'
+		TARGET_ARCH='i386' \
+		CROSS_COMPILE='i686-linux-gnu-' \
+		ARCH_TEST='i386'
 
 RUN set -ex; \
 	make clean all test \
@@ -89,9 +80,22 @@ RUN set -ex; \
 
 RUN set -ex; \
 	make clean all test \
-		TARGET_ARCH='i386' \
-		CROSS_COMPILE='i686-linux-gnu-' \
-		ARCH_TEST='i386'
+		TARGET_ARCH='arm32v7' \
+		CROSS_COMPILE='arm-linux-gnueabihf-' \
+#		EXTRA_CFLAGS='-march=armv7-a+fp' \
+		ARCH_TEST='armhf'
+RUN set -ex; \
+	make clean all test \
+		TARGET_ARCH='arm32v6' \
+		CROSS_COMPILE='arm-linux-gnueabi-' \
+		EXTRA_CFLAGS='-march=armv6+fp' \
+		ARCH_TEST='armhf'
+RUN set -ex; \
+	make clean all test \
+		TARGET_ARCH='arm32v5' \
+		CROSS_COMPILE='arm-linux-gnueabi-' \
+#		EXTRA_CFLAGS='-march=armv5te' \
+		ARCH_TEST='armel'
 
 RUN set -ex; \
 	make clean all test \
@@ -118,6 +122,6 @@ RUN set -ex; \
 		CROSS_COMPILE='s390x-linux-gnu-' \
 		ARCH_TEST='s390x'
 
-RUN find \( -name 'hello' -or -name 'hello.txt' \) -exec file '{}' + -exec ls -lh '{}' +
+RUN find \( -name 'hello' -or -name 'hello.txt' -or -name '.host-arch' \) -exec file '{}' + -exec ls -lh '{}' +
 
-CMD ["./amd64/hello-world/hello"]
+CMD [".host-arch/hello-world/hello"]
