@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 2,
+  "mediaType": "application/vnd.oci.image.index.v1+json",
+  "manifests": [
+    {
+      "mediaType": "application/vnd.oci.image.manifest.v1+json",
+      "digest": "sha256:5d48539a198296ab84dfbcb5716e1734160272a25b5f50ecd8b97bfe09558159",
+      "size": 527,
+      "platform": {
+        "architecture": "riscv64",
+        "os": "linux"
+      },
+      "annotations": {
+        "org.opencontainers.image.ref.name": "hello-world:linux",
+        "io.containerd.image.name": "hello-world:linux"
+      }
+    }
+  ]
+}

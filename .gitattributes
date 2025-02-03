@@ -1,4 +1,5 @@
 **/*.txt  eol=lf
 Makefile  eol=lf
 hello.c   eol=lf
-/oci/*/**  linguist-generated
+/**/oci/* linguist-generated
+/**/oci/**/* linguist-generated
