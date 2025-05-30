@@ -33,7 +33,6 @@ $(C_TARGETS): hello.c $(MUSL_GCC)
 		for winVariant in \
 			nanoserver-ltsc2025 \
 			nanoserver-ltsc2022 \
-			nanoserver-1809 \
 		; do \
 			mkdir -p "$(@D)/$$winVariant"; \
 			'$@' | sed \
