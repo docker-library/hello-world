@@ -65,7 +65,6 @@ done
 for winVariant in \
 	nanoserver-ltsc2025 \
 	nanoserver-ltsc2022 \
-	nanoserver-1809 \
 ; do
 	winArches=( *"/$image/$winVariant/hello.txt" )
 	winArches=( "${winArches[@]%"/$image/$winVariant/hello.txt"}" )
