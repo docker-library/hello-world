@@ -1,0 +1,19 @@
+Origin: https://bugs.debian.org/1050429#64
+
+--- tools/musl-gcc.specs.sh	2024-03-01 02:07:33.000000000 +0000
++++ tools/musl-gcc.specs.sh.new	2025-06-17 21:19:01.669504848 +0000
+@@ -3,12 +3,13 @@
+ ldso=$3
+ cat <<EOF
+ %rename cpp_options old_cpp_options
++%rename cc1 old_cc1
+ 
+ *cpp_options:
+ -nostdinc -isystem $incdir -isystem include%s %(old_cpp_options)
+ 
+ *cc1:
+-%(cc1_cpu) -nostdinc -isystem $incdir -isystem include%s
++-nostdinc -isystem $incdir -isystem include%s %(old_cc1)
+ 
+ *link_libgcc:
+ -L$libdir -L .%s

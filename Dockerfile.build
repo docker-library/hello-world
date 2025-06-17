@@ -1,10 +1,9 @@
 # explicitly use Debian for maximum cross-architecture compatibility
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 RUN set -eux; \
-	apt-get update; \
 	dpkgArch="$(dpkg --print-architecture)"; \
-	apt-get install -y --no-install-recommends \
+	apt-get install --update -y --no-install-recommends \
 		ca-certificates \
 		gnupg \
 		wget \
@@ -37,8 +36,9 @@ RUN set -eux; \
 		\
 		arch-test \
 		file \
+		patch \
 	; \
-	rm -rf /var/lib/apt/lists/*
+	apt-get dist-clean
 
 # https://musl.libc.org/releases.html
 ENV MUSL_VERSION 1.2.5
@@ -58,6 +58,9 @@ RUN set -eux; \
 
 WORKDIR /usr/src/hello
 COPY . .
+
+# https://bugs.debian.org/1050429: error: unrecognized command-line option '-EL' (on mips64le specifically/only)
+RUN patch --input="$PWD/musl-gcc-mips64le.patch" /usr/local/src/musl/tools/musl-gcc.specs.sh
 
 # the following steps are grouped into "architecture families" and roughly ordered in a descending compatibility way such that we end up with the most accurate ".host-arch" symlink we can reasonably get
 
