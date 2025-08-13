@@ -20,6 +20,8 @@ $(MUSL_GCC):
 	mkdir -p '$(MUSL_DIR)'
 	cd '$(MUSL_DIR)' && '$(MUSL_SRC)/configure' --disable-shared --prefix='$(MUSL_PREFIX)' > /dev/null
 	$(MAKE) -C '$(MUSL_DIR)' -j '$(shell nproc)' install > /dev/null
+.PHONY: musl
+musl: $(MUSL_GCC)
 
 $(C_TARGETS): hello.c $(MUSL_GCC)
 	$(MUSL_GCC) $(CFLAGS) -Wl,--gc-sections -static \

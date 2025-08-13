@@ -1,12 +1,11 @@
 # explicitly use Debian for maximum cross-architecture compatibility
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 RUN set -eux; \
-	apt-get update; \
 	dpkgArch="$(dpkg --print-architecture)"; \
-	apt-get install -y --no-install-recommends \
+	apt-get install --update -y --no-install-recommends \
 		ca-certificates \
-		gnupg \
+		sq \
 		wget \
 		\
 		gcc \
@@ -37,20 +36,35 @@ RUN set -eux; \
 		\
 		arch-test \
 		file \
+		patch \
 	; \
-	rm -rf /var/lib/apt/lists/*
+	apt-get dist-clean
 
 # https://musl.libc.org/releases.html
 ENV MUSL_VERSION 1.2.5
 RUN set -eux; \
-	wget -O musl.tgz.asc "https://musl.libc.org/releases/musl-$MUSL_VERSION.tar.gz.asc"; \
-	wget -O musl.tgz "https://musl.libc.org/releases/musl-$MUSL_VERSION.tar.gz"; \
-	\
-	export GNUPGHOME="$(mktemp -d)"; \
-	gpg --batch --keyserver keyserver.ubuntu.com --recv-keys '836489290BB6B70F99FFDA0556BCDB593020450F'; \
-	gpg --batch --verify musl.tgz.asc musl.tgz; \
-	gpgconf --kill all; \
-	rm -rf "$GNUPGHOME" musl.tgz.asc; \
+# > Since 1.1.7, releases are signed with the project GPG key. Its fingerprint is 8364 8929 0BB6 B70F 99FF DA05 56BC DB59 3020 450F.
+	muslKey='8364 8929 0BB6 B70F 99FF DA05 56BC DB59 3020 450F'; \
+#
+# Error: No binding signature at time 2025-08-12T23:23:25Z
+# because: Policy rejected non-revocation signature (PositiveCertification) requiring second pre-image resistance
+# because: SHA1 is not considered secure since 2023-02-01T00:00:00Z
+#
+# and then:
+#
+# Error: Policy rejected non-revocation signature (Binary) requiring collision resistance
+# because: SHA1 is not considered secure since 2013-02-01T00:00:00Z
+# 0 authenticated signatures, 1 bad signature.
+#
+	sq='sq --policy-as-of 2013-01-01T00:00:00Z'; \
+	$sq network search "$muslKey"; \
+	$sq pki link add --cert "$muslKey" --userid 'musl libc <musl@libc.org>'; \
+	$sq download \
+		--output 'musl.tgz' \
+		--url "https://musl.libc.org/releases/musl-$MUSL_VERSION.tar.gz" \
+		--signature-url "https://musl.libc.org/releases/musl-$MUSL_VERSION.tar.gz.asc" \
+		--signer "$muslKey" \
+	; \
 	\
 	mkdir /usr/local/src/musl; \
 	tar --extract --file musl.tgz --directory /usr/local/src/musl --strip-components 1; \
@@ -58,6 +72,9 @@ RUN set -eux; \
 
 WORKDIR /usr/src/hello
 COPY . .
+
+# https://bugs.debian.org/1050429: error: unrecognized command-line option '-EL' (on mips64le specifically/only)
+RUN patch --input="$PWD/musl-gcc-mips64le.patch" /usr/local/src/musl/tools/musl-gcc.specs.sh
 
 # the following steps are grouped into "architecture families" and roughly ordered in a descending compatibility way such that we end up with the most accurate ".host-arch" symlink we can reasonably get
 
