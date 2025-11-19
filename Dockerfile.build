@@ -141,4 +141,4 @@ RUN set -ex; \
 
 RUN find \( -name 'hello' -or -name 'hello.txt' -or -name '.host-arch' \) -exec file '{}' + -exec ls -lh '{}' +
 
-CMD [".host-arch/hello-world/hello"]
+CMD [".host-arch/hello"]

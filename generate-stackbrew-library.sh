@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -eu
 
-image="${1:-hello-world}"
-
 self="$(basename "$BASH_SOURCE")"
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
@@ -45,8 +43,8 @@ join() {
 	echo "${out#$sep}"
 }
 
-arches=( *"/$image/hello" )
-arches=( "${arches[@]%"/$image/hello"}" )
+arches=( *"/hello" )
+arches=( "${arches[@]%"/hello"}" )
 
 echo
 cat <<-EOE
@@ -55,10 +53,10 @@ cat <<-EOE
 	Architectures: $(join ', ' "${arches[@]}")
 EOE
 for arch in "${arches[@]}"; do
-	commit="$(dirCommit "$arch/$image")"
+	commit="$(dirCommit "$arch")"
 	cat <<-EOE
 		$arch-GitCommit: $commit
-		$arch-Directory: $arch/$image
+		$arch-Directory: $arch
 	EOE
 done
 
@@ -66,8 +64,8 @@ for winVariant in \
 	nanoserver-ltsc2025 \
 	nanoserver-ltsc2022 \
 ; do
-	winArches=( *"/$image/$winVariant/hello.txt" )
-	winArches=( "${winArches[@]%"/$image/$winVariant/hello.txt"}" )
+	winArches=( *"/$winVariant/hello.txt" )
+	winArches=( "${winArches[@]%"/$winVariant/hello.txt"}" )
 
 	if [ "${#winArches[@]}" -gt 0 ]; then
 		echo
@@ -77,10 +75,10 @@ for winVariant in \
 			Architectures: $(join ', ' "${winArches[@]/#/windows-}")
 		EOE
 		for arch in "${winArches[@]}"; do
-			commit="$(dirCommit "$arch/$image/$winVariant")"
+			commit="$(dirCommit "$arch/$winVariant")"
 			cat <<-EOE
 				windows-$arch-GitCommit: $commit
-				windows-$arch-Directory: $arch/$image/$winVariant
+				windows-$arch-Directory: $arch/$winVariant
 			EOE
 		done
 		cat <<-EOE
