@@ -4,36 +4,16 @@ set -eu
 self="$(basename "$BASH_SOURCE")"
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
-# get the most recent commit which modified any of "$@"
-fileCommit() {
-	git log -1 --format='format:%H' HEAD -- "$@"
-}
+commit="$(git log -1 --format='format:%H' HEAD -- '[^.]*/**')"
 
-# get the most recent commit which modified "$1/Dockerfile" or any file COPY'd from "$1/Dockerfile"
-dirCommit() {
-	local dir="$1"; shift
-	(
-		cd "$dir"
-		fileCommit \
-			Dockerfile \
-			$(git show HEAD:./Dockerfile | awk '
-				toupper($1) == "COPY" {
-					for (i = 2; i < NF; i++) {
-						print $i
-					}
-				}
-			')
-	)
-}
-
-generateCommit="$(fileCommit "$self")"
+selfCommit="$(git log -1 --format='format:%H' HEAD -- "$self")"
 cat <<-EOH
-# this file is generated via https://github.com/docker-library/hello-world/blob/$generateCommit/$self
+# this file is generated via https://github.com/docker-library/hello-world/blob/$selfCommit/$self
 
 Maintainers: Tianon Gravi <admwiggin@gmail.com> (@tianon),
              Joseph Ferguson <yosifkit@gmail.com> (@yosifkit)
 GitRepo: https://github.com/docker-library/hello-world.git
-GitCommit: $generateCommit
+GitCommit: $commit
 EOH
 
 # prints "$2$1$3$1...$N"
@@ -53,11 +33,7 @@ cat <<-EOE
 	Architectures: $(join ', ' "${arches[@]}")
 EOE
 for arch in "${arches[@]}"; do
-	commit="$(dirCommit "$arch")"
-	cat <<-EOE
-		$arch-GitCommit: $commit
-		$arch-Directory: $arch
-	EOE
+	echo "$arch-Directory: $arch"
 done
 
 for winVariant in \
@@ -75,14 +51,8 @@ for winVariant in \
 			Architectures: $(join ', ' "${winArches[@]/#/windows-}")
 		EOE
 		for arch in "${winArches[@]}"; do
-			commit="$(dirCommit "$arch/$winVariant")"
-			cat <<-EOE
-				windows-$arch-GitCommit: $commit
-				windows-$arch-Directory: $arch/$winVariant
-			EOE
+			echo "windows-$arch-Directory: $arch/$winVariant"
 		done
-		cat <<-EOE
-			Constraints: $winVariant
-		EOE
+		echo "Constraints: $winVariant"
 	fi
 done
