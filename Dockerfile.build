@@ -18,7 +18,6 @@ RUN set -eux; \
 		libc6-dev-armel-cross \
 		libc6-dev-armhf-cross \
 		libc6-dev-i386-cross \
-		libc6-dev-mips64el-cross \
 		libc6-dev-ppc64el-cross \
 		libc6-dev-riscv64-cross \
 		libc6-dev-s390x-cross \
@@ -29,7 +28,6 @@ RUN set -eux; \
 		gcc-arm-linux-gnueabi \
 		gcc-arm-linux-gnueabihf \
 		gcc-i686-linux-gnu \
-		gcc-mips64el-linux-gnuabi64 \
 		gcc-powerpc64le-linux-gnu \
 		gcc-riscv64-linux-gnu \
 		gcc-s390x-linux-gnu \
@@ -73,9 +71,6 @@ RUN set -eux; \
 WORKDIR /usr/src/hello
 COPY . .
 
-# https://bugs.debian.org/1050429: error: unrecognized command-line option '-EL' (on mips64le specifically/only)
-RUN patch --input="$PWD/musl-gcc-mips64le.patch" /usr/local/src/musl/tools/musl-gcc.specs.sh
-
 # the following steps are grouped into "architecture families" and roughly ordered in a descending compatibility way such that we end up with the most accurate ".host-arch" symlink we can reasonably get
 
 RUN set -ex; \
@@ -113,12 +108,6 @@ RUN set -ex; \
 		CROSS_COMPILE='arm-linux-gnueabi-' \
 #		EXTRA_CFLAGS='-march=armv5te' \
 		ARCH_TEST='armel'
-
-RUN set -ex; \
-	make clean all test \
-		TARGET_ARCH='mips64le' \
-		CROSS_COMPILE='mips64el-linux-gnuabi64-' \
-		ARCH_TEST='mips64el'
 
 RUN set -ex; \
 	make clean all test \
